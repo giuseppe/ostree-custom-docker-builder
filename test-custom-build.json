@@ -1,0 +1,66 @@
+{
+    "kind": "BuildConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "test-ostree-emacs-builder",
+        "creationTimestamp": null,
+        "labels": {
+            "name": "test-ostree-emacs-builder"
+        }
+    },
+    "spec": {
+        "triggers": [
+            {
+                "type": "generic",
+                "generic": {
+                    "secret": "secret101"
+                }
+            },
+            {
+                "type": "ConfigChange"
+            }
+        ],
+        "strategy": {
+          "type": "Custom",
+          "customStrategy": {
+            "from": {
+                "kind": "DockerImage",
+                "name": "172.30.230.223:5000/test/ostree-custom-docker-builder"
+            },
+            "env": [
+              {
+                "name": "SOURCE_REPOSITORY",
+                "value": "http://192.168.125.1/repo-emacs"
+              },
+              {
+                "name": "SOURCE_REF",
+                "value": "fedora-atomic/f22/x86_64/emacs"
+              }
+            ],
+            "exposeDockerSocket": true
+          }
+        },
+        "output": {
+            "to": {
+                "kind": "ImageStream",
+                "name": "test"
+            }
+        },
+        "resources": {}
+    },
+    "status": {
+        "phase": ""
+    }
+}
+{
+    "kind": "ImageStream",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "test",
+        "creationTimestamp": null
+    },
+    "spec": {},
+    "status": {
+        "dockerImageRepository": ""
+    }
+}
